@@ -4,7 +4,6 @@ from Crypto.PublicKey import RSA
 from Crypto.Cipher import PKCS1_OAEP
 
 HEADER = 64
-# FORMAT = "utf-8"
 FILL_LENGTH_CHAR = "a"
 
 def fill_length(length):
