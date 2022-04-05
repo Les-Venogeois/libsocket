@@ -88,6 +88,25 @@ class Client:
             # Decrypt message with private key
             message = cypher(message, xor_key)
         return message
+
+    # Create a function that will send a file
+    def send_file(self, file_name, xor_key=None):
+        # Send file name
+        self.send(file_name, xor_key)
+        # Send file
+        with open(file_name, 'rb') as f:
+            file_data = f.read()
+        self.send(file_data, xor_key)
+
+    # Create a function that will receive a file
+    def receive_file(self, file_name, xor_key=None):
+        # Receive file name
+        file_name = self.receive(xor_key).decode()
+        # Receive file
+        file_data = self.receive(xor_key)
+        # Save file
+        with open(file_name, 'wb') as f:
+            f.write(file_data)
     
 # Make a socket server using RSA above
 class Server:
@@ -131,3 +150,24 @@ class Server:
         # Send message
         conn.send(str(fill_length(str(len(message)))).encode())
         conn.send(message)
+
+    # Create a function that will send a file
+    def send_file(self, conn, file_name, xor_key=None):
+        # Open file
+        file = open(file_name, 'rb')
+        # Read file
+        file_data = file.read()
+        # Send file
+        self.send(conn, file_data, xor_key)
+        # Close file
+        file.close()
+
+    # Create a function that will receive a file
+    def receive_file(self, conn, file_name, xor_key=None):
+        # Receive file name
+        file_name = self.receive(conn, xor_key).decode()
+        # Receive file
+        file_data = self.receive(conn, xor_key)
+        # Save file
+        with open(file_name, 'wb') as f:
+            f.write(file_data)
