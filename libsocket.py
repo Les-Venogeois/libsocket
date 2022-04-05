@@ -28,13 +28,10 @@ def generate_keys(KEYSIZE=2048):
     public_key = key.publickey()
     private_key = key
     
-    # Convert keys to bytes and export to files
+    # Convert keys to bytes and return them
     public_key = public_key.export_key()
     private_key = private_key.export_key()
-    with open('public_key.pem', 'wb') as f:
-        f.write(public_key)
-    with open('private_key.pem', 'wb') as f:
-        f.write(private_key)
+    return public_key, private_key
 
 # Encrypt message with public key
 def encrypt(message, public_key):
@@ -69,7 +66,7 @@ class Client:
         self.sock.send(encrypt(xor_key, serv_pub_key))
         
     def send(self, message, xor_key=None):
-        print(len(message))
+        # print(len(message))
         if (xor_key != None):
             # Encrypt message with public key
             message = cypher(message, xor_key)
@@ -117,13 +114,13 @@ class Server:
         self.sock.bind((self.host, self.port))
         self.sock.listen(5)
         
-    def exchange_keys(self, conn, serv_pub_key):
+    def exchange_keys(self, conn, serv_pub_key, serv_priv_key):
         # Send public key to client
         conn.send(serv_pub_key)
         # Receive xor key from client
         xor_key = conn.recv(1024)
         
-        return decrypt(xor_key, open('private_key.pem', 'rb').read())
+        return decrypt(xor_key, serv_priv_key)
     
     def recv_client(self):
         # Accept connection

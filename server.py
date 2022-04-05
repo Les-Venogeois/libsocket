@@ -1,15 +1,17 @@
 from libsocket import *
-generate_keys()
+KEYSIZE = 2048
+public_key, private_key = generate_keys(KEYSIZE)
 print("Keys generated")
-
-# Load private key from file
-with open('private_key.pem', 'rb') as f:
-    private_key = f.read()
-with open('public_key.pem', 'rb') as f:
-    public_key = f.read()
 
 # Start server with private key
 server = Server('127.0.0.1', 4444)
 conn = server.recv_client()
-xor_key = server.exchange_keys(conn, public_key)
+print("Client connected")
+xor_key = server.exchange_keys(conn, public_key, private_key)
+print("Keys exchanged")
+# Delete private key and public key from memory
+del private_key
+del public_key
+print("Keys deleted")
 server.receive_file(conn, xor_key)
+print("File received")
