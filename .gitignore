@@ -1,4 +1,5 @@
-__pycache__/*
+__pycache__/
 Diagramme.png
-download_client/*
-download_server/*
+download_client/
+download_server/
+.vscode/
