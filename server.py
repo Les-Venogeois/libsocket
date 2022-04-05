@@ -1,5 +1,6 @@
 from libsocket import *
 generate_keys()
+print("Keys generated")
 
 # Load private key from file
 with open('private_key.pem', 'rb') as f:
@@ -10,8 +11,5 @@ with open('public_key.pem', 'rb') as f:
 # Start server with private key
 server = Server('127.0.0.1', 4444)
 conn = server.recv_client()
-xor_key = server.exchange_keys(public_key, conn)
-msg = server.receive(conn, xor_key)
-print(msg)
-server.send(conn, b'Hello!', xor_key)
-input("Press enter to close...")
+xor_key = server.exchange_keys(conn, public_key)
+server.receive_file(conn, xor_key)

@@ -92,20 +92,20 @@ class Client:
     # Function that will send a file
     def send_file(self, file_name, xor_key=None):
         # Send file name
-        self.send(file_name, xor_key)
+        self.send(file_name.encode(), xor_key)
         # Send file
-        with open(file_name, 'rb') as f:
+        with open(f"download_client/{file_name}", 'rb') as f:
             file_data = f.read()
         self.send(file_data, xor_key)
 
     # Function that will receive a file
-    def receive_file(self, file_name, xor_key=None):
+    def receive_file(self, xor_key=None):
         # Receive file name
         file_name = self.receive(xor_key).decode()
         # Receive file
         file_data = self.receive(xor_key)
         # Save file
-        with open(file_name, 'wb') as f:
+        with open(f"download_client/{file_name}", 'wb') as f:
             f.write(file_data)
     
 # Socket server using RSA above
@@ -153,15 +153,16 @@ class Server:
 
     # Function that will send a file
     def send_file(self, conn, file_name, xor_key=None):
+        # Send file name
+        self.send(conn, file_name.encode(), xor_key)
         # Open file
-        file = open(file_name, 'rb')
-        file_data = file.read()
+        with open(file_name, 'rb') as f:
+            file_data = f.read()
         self.send(conn, file_data, xor_key)
-        file.close()
 
     # Function that will receive a file
-    def receive_file(self, conn, file_name, xor_key=None):
+    def receive_file(self, conn, xor_key=None):
         file_name = self.receive(conn, xor_key).decode()
         file_data = self.receive(conn, xor_key)
-        with open(file_name, 'wb') as f:
+        with open(f"download_server/{file_name}", 'wb') as f:
             f.write(file_data)
