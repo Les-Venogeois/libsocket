@@ -56,7 +56,7 @@ def decrypt(message, private_key):
     plaintext = cipher.decrypt(message)
     return plaintext
 
-# Make a socket client using RSA above
+# Socket client using RSA above
 class Client:
     def __init__(self, host, port):
         self.host = host
@@ -89,7 +89,7 @@ class Client:
             message = cypher(message, xor_key)
         return message
 
-    # Create a function that will send a file
+    # Function that will send a file
     def send_file(self, file_name, xor_key=None):
         # Send file name
         self.send(file_name, xor_key)
@@ -98,7 +98,7 @@ class Client:
             file_data = f.read()
         self.send(file_data, xor_key)
 
-    # Create a function that will receive a file
+    # Function that will receive a file
     def receive_file(self, file_name, xor_key=None):
         # Receive file name
         file_name = self.receive(xor_key).decode()
@@ -108,7 +108,7 @@ class Client:
         with open(file_name, 'wb') as f:
             f.write(file_data)
     
-# Make a socket server using RSA above
+# Socket server using RSA above
 class Server:
     def __init__(self, host, port):
         self.host = host
@@ -151,23 +151,17 @@ class Server:
         conn.send(str(fill_length(str(len(message)))).encode())
         conn.send(message)
 
-    # Create a function that will send a file
+    # Function that will send a file
     def send_file(self, conn, file_name, xor_key=None):
         # Open file
         file = open(file_name, 'rb')
-        # Read file
         file_data = file.read()
-        # Send file
         self.send(conn, file_data, xor_key)
-        # Close file
         file.close()
 
-    # Create a function that will receive a file
+    # Function that will receive a file
     def receive_file(self, conn, file_name, xor_key=None):
-        # Receive file name
         file_name = self.receive(conn, xor_key).decode()
-        # Receive file
         file_data = self.receive(conn, xor_key)
-        # Save file
         with open(file_name, 'wb') as f:
             f.write(file_data)
