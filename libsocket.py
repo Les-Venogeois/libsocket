@@ -2,10 +2,9 @@
 import socket
 from Crypto.PublicKey import RSA
 from Crypto.Cipher import PKCS1_OAEP
-import threading
 
 HEADER = 64
-FORMAT = "utf-8"
+# FORMAT = "utf-8"
 FILL_LENGTH_CHAR = "a"
 
 def fill_length(length):
@@ -103,6 +102,7 @@ class Client:
         # Save file
         with open(f"download_client/{file_name}", 'wb') as f:
             f.write(file_data)
+        return file_name
     
 # Socket server using RSA above
 class Server:
@@ -162,3 +162,4 @@ class Server:
         file_data = self.receive(conn, xor_key)
         with open(f"download_server/{file_name}", 'wb') as f:
             f.write(file_data)
+        return file_name
