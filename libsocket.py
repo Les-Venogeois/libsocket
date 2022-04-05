@@ -66,7 +66,6 @@ class Client:
         self.sock.send(encrypt(xor_key, serv_pub_key))
         
     def send(self, message, xor_key=None):
-        # print(len(message))
         if (xor_key != None):
             # Encrypt message with public key
             message = cypher(message, xor_key)
