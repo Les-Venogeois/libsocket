@@ -1,4 +1,5 @@
 # Make a socket client/server encrypted with RSA
+import os
 import socket
 from Crypto.PublicKey import RSA
 from Crypto.Cipher import PKCS1_OAEP
@@ -88,7 +89,7 @@ class Client:
         # Send file name
         self.send(file_name.encode(), xor_key)
         # Send file
-        with open(f"download_client/{file_name}", 'rb') as f:
+        with open(file_name, 'rb') as f:
             file_data = f.read()
         self.send(file_data, xor_key)
 
@@ -98,6 +99,9 @@ class Client:
         file_name = self.receive(xor_key).decode()
         # Receive file
         file_data = self.receive(xor_key)
+        # Check if download folder exists
+        if not os.path.isdir('download_client'):
+            os.mkdir('download_client')
         # Save file
         with open(f"download_client/{file_name}", 'wb') as f:
             f.write(file_data)
@@ -159,6 +163,9 @@ class Server:
     def receive_file(self, conn, xor_key=None):
         file_name = self.receive(conn, xor_key).decode()
         file_data = self.receive(conn, xor_key)
+        # Check if download folder exists
+        if not os.path.isdir('download_server'):
+            os.mkdir('download_server')
         with open(f"download_server/{file_name}", 'wb') as f:
             f.write(file_data)
         return file_name
