@@ -20,3 +20,10 @@ Quand il reçoit la clé symétrique, il va envoyer un paquet de confirmation au
 
 ## Schéma
 ![Diagramme de l'algorythme](Diagramme.png)
+
+## Dépendances
+Afin de pouvoir utiliser la librairie correctement, vous aurez besoin d'installer le module `pycryptodome`. Vous pouvez l'installer à l'aide de l'une des deux commandes au choix après avoir cloné le dépot:
+
+`pip3 install pycryptodome`
+
+`pip3 install -r requirements.txt`
