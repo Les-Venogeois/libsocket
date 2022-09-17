@@ -112,7 +112,7 @@ class Client:
         self.sock.connect((self.host, self.port))
 
     def exchange_keys(self, xor_key: bytes):
-        """Sends the XOR key to the server usint its public RSA key.
+        """Sends the XOR key to the server using its public RSA key.
 
         Args:
             xor_key (bytes): XOR key to send
