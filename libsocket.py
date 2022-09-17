@@ -210,7 +210,7 @@ class Server:
         """Sends the public key of the server to the client, and receive the XOR key from it.
 
         Args:
-            conn (socket.socket): Connection to the client
+            conn (socket.socket): Connection with the client
             serv_pub_key (bytes): Public key of the server
             serv_priv_key (bytes): Private key of the server
 
@@ -259,7 +259,7 @@ class Server:
         """Sends a message to specified client and encrypt it with the given XOR key if provided.
 
         Args:
-            conn (socket.socket): Connection to the client
+            conn (socket.socket): Connection with the client
             message (bytes): Message to send
             xor_key (bytes, optional): XOR key to use. Defaults to None.
         """
