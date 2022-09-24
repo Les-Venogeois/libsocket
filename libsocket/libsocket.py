@@ -1,4 +1,3 @@
-# Make a socket client/server encrypted with RSA
 import os
 import socket
 from typing import Tuple
@@ -319,3 +318,15 @@ class Server:
         with open(f"{folder}/{file_name}", 'wb') as f:
             f.write(file_data)
         return file_name
+
+if __name__ == '__main__':
+    ERR_MSG = """
+    This is a library, and not an executable python program.
+    Please, use the library by importing it using one of the lines below:
+    
+        import libsocket
+        from libsocket import Client
+        from libsocket import Server
+        from libsocket import *
+    """
+    print(ERR_MSG)
