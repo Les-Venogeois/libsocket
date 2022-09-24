@@ -8,7 +8,7 @@ setuptools.setup(
     version="1.30.7",
     author="Chaxiraxi - nem013",
     author_email="ChaxiraxiCH@protonmail.ch",
-    description="A socket library that facilitates socket communication between python client and server.",
+    description="A socket library that facilitates communication between python client and server.",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/Les-Venogeois/libsocket",
