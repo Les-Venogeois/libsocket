@@ -41,24 +41,6 @@ def cypher(message: bytes, key: bytes) -> bytes:
         cyphered += bytes([message[i] ^ key[i % len(key)]])
     return cyphered
 
-def generate_keys(KEYSIZE: int =2048) -> Tuple[bytes, bytes]:
-    """Generate RSA key pair for XOR key secure exchange
-
-    Args:
-        KEYSIZE (int, optional): Size of the keys. Defaults to 2048.
-
-    Returns:
-        Tuple[bytes, bytes]: public key and private key
-    """    
-    key: RsaKey = RSA.generate(KEYSIZE)
-    public_key: RsaKey = key.publickey()
-    private_key: RsaKey = key
-    
-    # Convert keys to bytes and return them
-    pubKey: bytes = public_key.export_key()
-    privKey: bytes = private_key.export_key()
-    return pubKey, privKey
-
 # Encrypt message with public key
 def encrypt(message: bytes, public_key: bytes) -> bytes:
     """Encrypt a message with the public key (used to send securely the XOR key)
@@ -110,6 +92,17 @@ class Client:
         self.port = port
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.sock.connect((self.host, self.port))
+
+    def generate_xor_key(self, size: int = 16):
+        """Generate the XOR key used for message encription.
+
+        Args:
+            size (int, optional): Size of the XOR key. Defaults to 16.
+
+        Returns:
+            bytes: Generated XOR key
+        """        
+        return os.urandom(size)
 
     def exchange_keys(self, xor_key: bytes):
         """Sends the XOR key to the server using its public RSA key.
@@ -170,11 +163,12 @@ class Client:
         self.send(file_data, xor_key)
 
     # Function that will receive a file
-    def receive_file(self, xor_key: bytes=None):
+    def receive_file(self, xor_key: bytes=None, folder: str="download_client"):
         """Recieve a file from the server and decrypt it if needed with the XOR key.
 
         Args:
             xor_key (bytes, optional): XOR key to use if needed. Defaults to None.
+            folder (str, optional): The folder where the file will be received. Defaults to "download_client".
 
         Returns:
             str: Name of the received file.
@@ -184,10 +178,10 @@ class Client:
         # Receive file
         file_data: bytes = self.receive(xor_key)
         # Check if download folder exists
-        if not os.path.isdir('download_client'):
-            os.mkdir('download_client')
+        if not os.path.isdir(folder):
+            os.mkdir(folder)
         # Save file
-        with open(f"download_client/{file_name}", 'wb') as f:
+        with open(f"{folder}/{file_name}", 'wb') as f:
             f.write(file_data)
         return file_name
     
@@ -206,6 +200,24 @@ class Server:
         self.sock.bind((self.host, self.port))
         self.sock.listen(5)
         
+    def generate_keys(self, KEYSIZE: int =2048) -> Tuple[bytes, bytes]:
+        """Generate RSA key pair for XOR key secure exchange
+
+        Args:
+            KEYSIZE (int, optional): Size of the keys. Defaults to 2048.
+
+        Returns:
+            Tuple[bytes, bytes]: public key and private key
+        """    
+        key: RsaKey = RSA.generate(KEYSIZE)
+        public_key: RsaKey = key.publickey()
+        private_key: RsaKey = key
+        
+        # Convert keys to bytes and return them
+        pubKey: bytes = public_key.export_key()
+        privKey: bytes = private_key.export_key()
+        return pubKey, privKey
+
     def exchange_keys(self, conn: socket.socket, serv_pub_key: bytes, serv_priv_key: bytes) -> bytes:
         """Sends the public key of the server to the client, and receive the XOR key from it.
 
@@ -288,12 +300,13 @@ class Server:
         self.send(conn, file_data, xor_key)
 
     # Function that will receive a file
-    def receive_file(self, conn: socket.socket, xor_key: bytes=None):
+    def receive_file(self, conn: socket.socket, xor_key: bytes=None, folder: str="download_server"):
         """Recieve a file from the client, decrypt it if needed, and write it to the disk.
 
         Args:
             conn (socket.socket): Connection with the client
             xor_key (bytes, optional): XOR key to use. Defaults to None.
+            folder (str, optional): The folder where the file will be received. Defaults to "download_server".
 
         Returns:
             str: Name of the received file
@@ -301,8 +314,8 @@ class Server:
         file_name: str = self.receive(conn, xor_key).decode()
         file_data: bytes = self.receive(conn, xor_key)
         # Check if download folder exists
-        if not os.path.isdir('download_server'):
-            os.mkdir('download_server')
-        with open(f"download_server/{file_name}", 'wb') as f:
+        if not os.path.isdir(folder):
+            os.mkdir(folder)
+        with open(f"{folder}/{file_name}", 'wb') as f:
             f.write(file_data)
         return file_name
