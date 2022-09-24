@@ -1,28 +1,27 @@
-# Algorythme de chiffrement
-## Principe
-L'idée derièrre l'algorythme choisi est de s'inspirer du SSH afin d'obtenir une connexion portable, sécurisée, et peu couteuse en ressources.
+# Libsocket
+## Principle
+The idea behind this library is to facilitate the communication between python clients and servers. It will automatically make the connection, and has the ability to send and receive messages and files. The connection can optionally be encrypted using XOR cypher. The XOR key is exchanged securely with an RSA keypair provided by the server. The encryption protocol is inspired by the SSH protocol, and described below.
 
-Pour cela l'idée est d'établir une connexion via un chiffrement symétrique, car c'est rapide et peu coûteux en ressources. Cependant, afin de rester portable, il nous faut un moyen de communiquer cette clé au pair avec lequel on communique. Pour se faire, on initialise la connexion avec un chiffrement asymétrique.
+## Encryption
+### Client
+The client will send a special request to the server to ask for its public key for asymmetric encryption. The client will wait for the response from the server, and store the key sent in response by the server.
 
-## Client
-Le client va envoyer une requête spéciale au serveur afin de lui demander sa clé publique pour le chiffrement asymétrique. Le client va attendre la réponse du serveur, et stocker la clé envoyé en réponse par le serveur.
+The client will then generate a random symmetric encryption key (a XOR key seems simple and efficient to me). It will encrypt the generated symmetric key with the previously received server's public key, and send the encrypted key to the server.
 
-Le client va ensuite générer une clé de chiffrement symétrique aléatoire (une clé XOR me paraît simple et efficace). Il va chiffrer la clé symétrique générée avec la clé publique du serveur précédement reçue, et envoyer la clé chiffrée au serveur.
+The server will then store the symmetric encryption key, and use it to decrypt and encrypt the messages during the communication process.
 
-Le client va ensuite attendre la réponse du serveur en utilisant cette clé symétrique pour s'assurer que la connexion est correctement établie.
+The client will have the ability to encrypt and decrypt the messages using the XOR key previously generated. The client can choose if it wants to encrypt the messages, however, once the key has been sent to the server, all the messages sent by the server to the client will be encrypted.
 
-Un fois la réponse du serveur reçue, le client va désormais chiffrer tout ses paquets en utilisant la clé symétrique, et déchiffrer toutes les réponses du serveur avec cette même clé
+### Serveur
+The server will wait for a connection request. When a client will ask him for his previously generated public key, he will send it to the client, and wait for the sending of the symmetric key.
 
-## Serveur
-Le serveur va attendre une demande de connexion. Quand un client va lui demander sa clé publique précédement générée, il va l'envoyer au client, et attendre l'envoi de la clé symétrique.
+When it receives the symmetric key, it will save it and use it to encrypt all messages sent to the client. If a recived message is encrypted, it will be decrypted with this same key.
 
-Quand il reçoit la clé symétrique, il va envoyer un paquet de confirmation au client, et va désormais l'utiliser pour chiffrer et déchiffrer tout les paquets communiquant avec le client.
+### Diagramm (in french)
+![Diagramm of the key exchage algorythm (in french)](Diagramme.png)
 
-## Schéma
-![Diagramme de l'algorythme](Diagramme.png)
-
-## Dépendances
-Afin de pouvoir utiliser la librairie correctement, vous aurez besoin d'installer le module `pycryptodome`. Vous pouvez l'installer à l'aide de l'une des deux commandes au choix après avoir cloné le dépot:
+## Dependencies
+In order to be able to use the library correctly, you will need to install the `pycryptodome` module (which is used for encryped communication). You can install it using one of two commands after cloning the repository:
 
 `pip3 install pycryptodome`
 
