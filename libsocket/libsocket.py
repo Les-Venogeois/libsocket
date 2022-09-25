@@ -235,7 +235,7 @@ class Server:
         
         return decrypt(xor_key, serv_priv_key)
     
-    def recv_client(self) -> socket.socket:
+    def accept(self) -> socket.socket:
         """Accepts a client connection and returns it.
 
         Returns:
