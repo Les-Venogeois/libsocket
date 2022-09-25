@@ -5,7 +5,7 @@ KEYSIZE = 1024
 server = Server('127.0.0.1', 4444)
 public_key, private_key = server.generate_keys(KEYSIZE)
 print("Keys generated")
-conn = server.recv_client()
+conn = server.accept()
 print("Client connected")
 xor_key = server.exchange_keys(conn, public_key, private_key)
 print("Keys exchanged")
