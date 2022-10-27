@@ -3,3 +3,6 @@ Diagramme.png
 download_client/
 download_server/
 .vscode/
+build/*
+dist/*
+libsocket.egg-info/*
