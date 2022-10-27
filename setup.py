@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="libsocket",
-    version="1.30.7",
+    version="1.31.0",
     author="Chaxiraxi - nem013",
     author_email="ChaxiraxiCH@protonmail.ch",
     description="A socket library that facilitates communication between python client and server.",
