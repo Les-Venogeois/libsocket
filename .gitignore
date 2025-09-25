@@ -1,3 +1,30 @@
 build/*
 dist/*
 libsocket.egg-info/*
+
+# C# build artifacts
+bin/
+obj/
+*.user
+*.suo
+*.cache
+*.dll
+*.pdb
+*.exe
+*.runtimeconfig.json
+*.deps.json
+
+# NuGet
+*.nupkg
+*.snupkg
+.nuget/
+
+# IDE files  
+.vs/
+.vscode/
+*.swp
+*.tmp
+
+# OS files
+.DS_Store
+Thumbs.db
