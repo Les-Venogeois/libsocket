@@ -1,0 +1,3 @@
+Hello from C# LibSocket!
+This is a test file to demonstrate file transfer functionality.
+The library supports RSA+XOR encryption for secure communication.

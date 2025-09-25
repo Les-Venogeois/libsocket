@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>LibSocket.CSharp</id>
+    <version>1.0.0</version>
+    <authors>LibSocket C# Port</authors>
+    <license type="expression">GPL-3.0-or-later</license>
+    <licenseUrl>https://licenses.nuget.org/GPL-3.0-or-later</licenseUrl>
+    <description>A socket library that facilitates communication between C# client and server with RSA+XOR encryption. Direct port of the Python libsocket library.</description>
+    <repository type="git" url="https://github.com/Les-Venogeois/libsocket" commit="01c60498713304f11441905cd1d6ec6180804897" />
+    <dependencies>
+      <group targetFramework="net6.0">
+        <dependency id="System.Security.Cryptography.Pkcs" version="8.0.0" exclude="Build,Analyzers" />
+        <dependency id="System.Text.Json" version="9.0.0" exclude="Build,Analyzers" />
+      </group>
+      <group targetFramework="net8.0">
+        <dependency id="System.Security.Cryptography.Pkcs" version="8.0.0" exclude="Build,Analyzers" />
+        <dependency id="System.Text.Json" version="9.0.0" exclude="Build,Analyzers" />
+      </group>
+      <group targetFramework="net9.0">
+        <dependency id="System.Security.Cryptography.Pkcs" version="8.0.0" exclude="Build,Analyzers" />
+        <dependency id="System.Text.Json" version="9.0.0" exclude="Build,Analyzers" />
+      </group>
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="/home/runner/work/libsocket/libsocket/LibSocketCSharp/bin/Release/net6.0/LibSocketCSharp.dll" target="lib/net6.0/LibSocketCSharp.dll" />
+    <file src="/home/runner/work/libsocket/libsocket/LibSocketCSharp/bin/Release/net8.0/LibSocketCSharp.dll" target="lib/net8.0/LibSocketCSharp.dll" />
+    <file src="/home/runner/work/libsocket/libsocket/LibSocketCSharp/bin/Release/net9.0/LibSocketCSharp.dll" target="lib/net9.0/LibSocketCSharp.dll" />
+  </files>
+</package>
